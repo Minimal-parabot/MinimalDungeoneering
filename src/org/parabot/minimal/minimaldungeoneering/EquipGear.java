@@ -3,6 +3,7 @@ package org.parabot.minimal.minimaldungeoneering;
 import org.parabot.environment.api.utils.Time;
 import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
+import org.rev317.min.api.methods.Game;
 import org.rev317.min.api.methods.Inventory;
 import org.rev317.min.api.methods.Menu;
 import org.rev317.min.api.wrappers.Item;
@@ -10,6 +11,7 @@ import org.rev317.min.api.wrappers.Item;
 /**
  * This class is in charge of making sure our equipment is worn
  * Additionally, it activates prayers if it recognizes that none are enabled
+ * and disabled auto-retaliate
  */
 public class EquipGear implements Strategy
 {
@@ -55,6 +57,11 @@ public class EquipGear implements Strategy
                 Prayer.activateNormalPrayers();
             else
                 Prayer.activateAncientPrayers();
+        }
+
+        if (Game.getSetting(172) > 0)
+        {
+            Menu.sendAction(169, -1, -1, 150);
         }
     }
 }
