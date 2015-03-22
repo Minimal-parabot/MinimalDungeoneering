@@ -109,14 +109,14 @@ public class MinimalDungeoneeringGUI extends JFrame
             String fieldText;
 
             // Headwear Field
-            fieldText = ((headwearId != -1) ? Integer.toString(headwearId) : "Head");
+            fieldText = ((headwearId != -1) ? Integer.toString(headwearId) : "0");
             headwearField = createTextField(fieldText);
             c.gridx = 4;
             c.gridy = 0;
             add(headwearField, c);
 
             // Body Field
-            fieldText = ((bodyId != -1) ? Integer.toString(bodyId) : "Body");
+            fieldText = ((bodyId != -1) ? Integer.toString(bodyId) : "0");
             bodyField = createTextField(fieldText);
             c.gridx = 4;
             c.gridy = 3;
@@ -124,7 +124,7 @@ public class MinimalDungeoneeringGUI extends JFrame
             add(bodyField, c);
 
             // Weapon Field
-            fieldText = ((weaponId != -1) ? Integer.toString(weaponId) : "Weap");
+            fieldText = ((weaponId != -1) ? Integer.toString(weaponId) : "0");
             weaponField = createTextField(fieldText);
             c.gridx = 2;
             c.gridy = 3;
@@ -132,7 +132,7 @@ public class MinimalDungeoneeringGUI extends JFrame
             add(weaponField, c);
 
             // Legwear field
-            fieldText = ((legwearId != -1) ? Integer.toString(legwearId) : "Legs");
+            fieldText = ((legwearId != -1) ? Integer.toString(legwearId) : "0");
             legwearField = createTextField(fieldText);
             c.insets = new Insets(10, 0, 0, 0);
             c.gridx = 4;
