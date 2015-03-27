@@ -9,7 +9,7 @@ import org.rev317.min.Loader;
 import java.awt.event.KeyEvent;
 
 /**
- * This class handles the relogging aspect
+ * This class handles the relogging
  * No password is necessary since Ikov doesn't remove it after log-in
  * The first sleep condition is there just to ensure we aren't dcing
  */
@@ -24,6 +24,8 @@ public class Relog implements Strategy
     @Override
     public void execute()
     {
+
+        MinimalDungeoneering.status = "Possible dc";
         Time.sleep(new SleepCondition()
         {
             @Override
@@ -50,6 +52,8 @@ public class Relog implements Strategy
 
             if (Loader.getClient().isLoggedIn())
             {
+                MinimalDungeoneering.status += "..";
+
                 Time.sleep(4000);
             }
         }

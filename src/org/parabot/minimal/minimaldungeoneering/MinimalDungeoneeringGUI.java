@@ -12,10 +12,6 @@ public class MinimalDungeoneeringGUI extends JFrame
 {
     private final Font FONT = new Font("Helvetica", Font.PLAIN, 14);
 
-    private JPanel armorPanel = null;
-    private JPanel buttonPanel = null;
-    private JPanel prayerPanel = null;
-
     private final Image DEFAULT_HEADWEAR = MinimalDungeoneering.getImage("http://i.imgur.com/YmLYXpu.png");
     private final Image DEFAULT_BODY = MinimalDungeoneering.getImage("http://i.imgur.com/vxjq2nM.png");
     private final Image DEFAULT_WEAPON = MinimalDungeoneering.getImage("http://i.imgur.com/SrniuOc.png");
@@ -31,63 +27,31 @@ public class MinimalDungeoneeringGUI extends JFrame
     private JLabel weaponLabel;
     private JLabel legwearLabel;
 
-    private final int COL_SIZE = 4;
-
     private int headwearId;
     private int bodyId;
     private int weaponId;
     private int legwearId;
 
-    private boolean normalPrayers = false;
-
     private Preferences prefs = Preferences.userNodeForPackage(MinimalDungeoneering.class);
     
     public MinimalDungeoneeringGUI()
     {
-        setLayout(new FlowLayout());
+        setLayout(new GridBagLayout());
         setVisible(true);
-        setSize(150, 350);
+        setSize(200, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+
+        GridBagConstraints c = new GridBagConstraints();
         
-        armorPanel = new ArmorPanel();
-        buttonPanel = new ButtonPanel();
-        prayerPanel = new PrayerPanel();
-        
-        add(armorPanel);
-        add(prayerPanel);
-        add(buttonPanel);
-    }
+        JPanel armorPanel = new ArmorPanel();
+        c.gridx = 0;
+        c.gridy = 0;
+        add(armorPanel, c);
 
-    public class PrayerPanel extends JPanel
-    {
-        public PrayerPanel()
-        {
-            final JCheckBox prayers = new JCheckBox("Ancient Curses");
-            prayers.setFont(FONT);
-            prayers.setSelected(true);
-
-            prayers.addActionListener(new ActionListener()
-            {
-                @Override
-                public void actionPerformed(ActionEvent e)
-                {
-                    if (prayers.isSelected())
-                    {
-                        normalPrayers = false;
-
-                        prayers.setText("Ancient Curses");
-                    }
-                    else
-                    {
-                        normalPrayers = true;
-
-                        prayers.setText("Normal");
-                    }
-                }
-            });
-
-            add(prayers);
-        }
+        JPanel buttonPanel = new ButtonPanel();
+        c.gridx = 0;
+        c.gridy = 1;
+        add(buttonPanel, c);
     }
 
     public class ArmorPanel extends JPanel
@@ -206,7 +170,7 @@ public class MinimalDungeoneeringGUI extends JFrame
 
         public JTextField createTextField(String str)
         {
-            JTextField jTextField = new JTextField(COL_SIZE);
+            JTextField jTextField = new JTextField(4);
 
             jTextField.setFont(FONT);
             jTextField.setText(str);
@@ -282,7 +246,7 @@ public class MinimalDungeoneeringGUI extends JFrame
             }
             catch (Exception ex)
             {
-
+                ex.printStackTrace();
             }
         }
 
@@ -350,7 +314,7 @@ public class MinimalDungeoneeringGUI extends JFrame
             }
             catch (Exception ex)
             {
-
+                ex.printStackTrace();
             }
         }
 
@@ -373,7 +337,7 @@ public class MinimalDungeoneeringGUI extends JFrame
                 public void actionPerformed(ActionEvent e)
                 {
                     updateArmorValues();
-                    
+
                     dispose();
                 }
             });
@@ -405,11 +369,6 @@ public class MinimalDungeoneeringGUI extends JFrame
     public int[] getArmor()
     {
         return new int[] { headwearId, bodyId, legwearId, weaponId };
-    }
-
-    public boolean getPrayer()
-    {
-        return normalPrayers;
     }
 
     public static void main(String[] args)

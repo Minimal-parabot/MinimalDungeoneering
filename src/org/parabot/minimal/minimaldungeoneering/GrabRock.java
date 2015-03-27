@@ -4,6 +4,7 @@ import org.parabot.environment.api.utils.Time;
 import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
 import org.rev317.min.api.methods.Inventory;
+import org.rev317.min.api.methods.SceneObjects;
 import org.rev317.min.api.wrappers.SceneObject;
 import org.rev317.min.api.wrappers.Tile;
 import org.rev317.min.api.wrappers.TilePath;
@@ -32,7 +33,7 @@ public class GrabRock implements Strategy
     {
         try
         {
-            for (SceneObject so : MinimalDungeoneering.getAllSceneObjects())
+            for (SceneObject so : SceneObjects.getAllSceneObjects())
             {
                 if (so.getId() == SCULPTURE_ID
                         && Inventory.getCount(ROCK_ID) == 0)
@@ -45,7 +46,7 @@ public class GrabRock implements Strategy
         }
         catch (NullPointerException e)
         {
-            e.printStackTrace();
+//            e.printStackTrace();
 
             Time.sleep(500);
         }

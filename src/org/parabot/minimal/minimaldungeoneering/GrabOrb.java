@@ -5,6 +5,7 @@ import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
 import org.rev317.min.api.methods.Inventory;
 import org.rev317.min.api.methods.Players;
+import org.rev317.min.api.methods.SceneObjects;
 import org.rev317.min.api.wrappers.SceneObject;
 import org.rev317.min.api.wrappers.Tile;
 import org.rev317.min.api.wrappers.TilePath;
@@ -38,7 +39,7 @@ public class GrabOrb implements Strategy
     {
         try
         {
-            for (SceneObject so : MinimalDungeoneering.getAllSceneObjects())
+            for (SceneObject so : SceneObjects.getAllSceneObjects())
             {
                 if (so.getId() == CRATE_ID
                         && so.getLocation().equals(CRATE_TILE)
@@ -52,7 +53,7 @@ public class GrabOrb implements Strategy
         }
         catch (NullPointerException e)
         {
-            e.printStackTrace();
+//            e.printStackTrace();
 
             Time.sleep(500);
         }

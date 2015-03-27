@@ -17,6 +17,8 @@ import org.rev317.min.api.wrappers.SceneObject;
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -26,7 +28,7 @@ import java.util.Collection;
         description = "A dungeoneering script that completes Floor 2 on Ikov.",
         name = "Minimal Dungeoneering",
         servers = { "Ikov" },
-        version = 1.0)
+        version = 1.1)
 
 public class MinimalDungeoneering extends Script implements Paintable, MessageListener
 {
@@ -57,8 +59,7 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
     {
         timer = new Timer();
         int[] armor;
-        boolean normalPrayers;
-        
+
         MinimalDungeoneeringGUI gui = new MinimalDungeoneeringGUI();
         gui.setVisible(true);
 
@@ -68,12 +69,11 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
         }
 
         armor = gui.getArmor();
-        normalPrayers = gui.getPrayer();
 
         strategies.add(new Relog());
         strategies.add(new EnterDungeon(THOK_ID));
         strategies.add(new ForceExit(BOSS_IDS, THOK_ID));
-        strategies.add(new EquipGear(armor, normalPrayers));
+        strategies.add(new EquipGear(armor));
         strategies.add(new WaitBoss(BOSS_IDS));
         strategies.add(new KillBoss(BOSS_IDS));
         strategies.add(new GrabRock());
@@ -104,6 +104,12 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
         {
             String message = m.getMessage().toLowerCase();
 
+            if (message.contains("object"))
+            {
+                status = "Nulled";
+                forceLogout();
+            }
+
             if (message.contains("completed a dungeon"))
             {
                 floorsCompleted++;
@@ -131,94 +137,19 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
         }
     }
 
-    /**
-     * Gets every loaded scene object in game
-     *
-     * @return every loaded scene object in game
-     */
-    public static final SceneObject[] getAllSceneObjects() {
-        ArrayList<SceneObject> sceneObjects = new ArrayList<>();
-        for (int x = 0; x < 104; x++) {
-            for (int y = 0; y < 104; y++) {
-                final Collection<SceneObject> sceneObjectsAtTile = getSceneObjectsAtTile(x, y, true);
-                if (sceneObjectsAtTile != null && !sceneObjectsAtTile.isEmpty()) {
-                    sceneObjects.addAll(sceneObjectsAtTile);
-                }
-            }
-        }
-        return sceneObjects.toArray(new SceneObject[sceneObjects.size()]);
-    }
-
-    /**
-     * Gets all sceneobjects at a tile
-     *
-     * @param x
-     * @param y
-     * @param useCached
-     *
-     * @return array of sceneobjects, or null if there aren't any
-     */
-    public static final Collection<SceneObject> getSceneObjectsAtTile(int x, int y, boolean useCached)
+    // Forces the user to log out
+    public static void forceLogout()
     {
-        Ground sceneTile = Loader.getClient().getScene().getGroundArray()[Game.getPlane()][x][y];
-        ArrayList<SceneObject> sceneObjects = null;
-
-        if (sceneTile != null)
+        try
         {
-            final SceneObjectTile[] interactiveObjects = sceneTile.getInteractiveObjects();
-
-            if (interactiveObjects != null)
-            {
-                for (final SceneObjectTile interactiveObject : interactiveObjects)
-                {
-                    if (interactiveObject != null)
-                    {
-                        if (sceneObjects == null)
-                        {
-                            sceneObjects = new ArrayList<>();
-                        }
-                        sceneObjects.add(new SceneObject(interactiveObject, SceneObject.TYPE_INTERACTIVE));
-                    }
-                }
-            }
+            Class<?> c = Loader.getClient().getClass();
+            Method m = c.getDeclaredMethod("am");
+            m.setAccessible(true);
+            m.invoke(Loader.getClient());
         }
-
-        SceneObjectTile sceneObjectTile = sceneTile.getWallDecoration();
-
-        if (sceneObjectTile != null)
+        catch (NoSuchMethodException | IllegalAccessException | InvocationTargetException e)
         {
-            if (sceneObjects == null)
-            {
-                sceneObjects = new ArrayList<>();
-            }
-
-            sceneObjects.add(new SceneObject(sceneObjectTile, SceneObject.TYPE_WALLDECORATION));
+            e.printStackTrace();
         }
-
-        sceneObjectTile = sceneTile.getWallObject();
-
-        if (sceneObjectTile != null)
-        {
-            if (sceneObjects == null)
-            {
-                sceneObjects = new ArrayList<>();
-            }
-
-            sceneObjects.add(new SceneObject(sceneObjectTile, SceneObject.TYPE_WALL));
-        }
-
-        sceneObjectTile = sceneTile.getGroundDecoration();
-
-        if (sceneObjectTile != null)
-        {
-            if (sceneObjects == null)
-            {
-                sceneObjects = new ArrayList<>();
-            }
-
-            sceneObjects.add(new SceneObject(sceneObjectTile, SceneObject.TYPE_GROUNDDECORATION));
-        }
-
-        return sceneObjects;
     }
 }

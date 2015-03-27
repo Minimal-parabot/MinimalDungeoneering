@@ -16,12 +16,10 @@ import org.rev317.min.api.wrappers.Item;
 public class EquipGear implements Strategy
 {
     private final int[] ARMOR_IDS;
-    private final boolean NORMAL_PRAYER;
     
-    public EquipGear(int[] ARMOR_IDS, boolean NORMAL_PRAYER)
+    public EquipGear(int[] ARMOR_IDS)
     {
         this.ARMOR_IDS = ARMOR_IDS;
-        this.NORMAL_PRAYER = NORMAL_PRAYER;
     }
 
     @Override
@@ -49,16 +47,23 @@ public class EquipGear implements Strategy
             }, 1000);
         }
         
-        if (!Prayer.areActivated())
+        if (!Prayer.isActivated())
         {
             MinimalDungeoneering.status = "Praying";
 
-            if (NORMAL_PRAYER)
-                Prayer.activateNormalPrayers();
-            else
-                Prayer.activateAncientPrayers();
+            Prayer.toggle();
+
+            Time.sleep(new SleepCondition()
+            {
+                @Override
+                public boolean isValid()
+                {
+                    return Prayer.isActivated();
+                }
+            }, 1000);
         }
 
+        // Toggles auto-retaliate
         if (Game.getSetting(172) > 0)
         {
             Menu.sendAction(169, -1, -1, 150);

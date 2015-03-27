@@ -38,6 +38,8 @@ public class ForceExit implements Strategy
     @Override
     public void execute()
     {
+        MinimalDungeoneering.status = "Nulled boss";
+
         Time.sleep(new SleepCondition()
         {
             @Override
@@ -55,27 +57,9 @@ public class ForceExit implements Strategy
 
             MinimalDungeoneering.monsterVisible = false;
             
-            forceLogout();
+            MinimalDungeoneering.forceLogout();
 
             Time.sleep(5000);
         }
     }
-
-    public void forceLogout()
-    {
-        try
-        {
-            Class<?> c = Loader.getClient().getClass();
-            Method m = c.getDeclaredMethod("ar");
-            m.setAccessible(true);
-            m.invoke(Loader.getClient());
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
-        }
-    }
 }
-
-// 16702 17250 16680 16946 16394 16416 16900
-// Helm Body Legs Rap Longsword Maul 2h

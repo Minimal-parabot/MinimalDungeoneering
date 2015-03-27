@@ -82,23 +82,12 @@ public enum Prayer
         this.normal = normal;
     }
     
-    public void toggle()
+    public static void toggle()
     {
-        if (Skill.PRAYER.getLevel() >= level)
-            Menu.sendAction(169, -1, -1, action3);
+        Menu.sendAction(1500, -1, -1, 216);
     }
     
-    public boolean isActivated()
-    {
-        return Game.getSetting(settingId) != 0;
-    }
-
-    public boolean isNormal()
-    {
-        return normal;
-    }
-    
-    public static boolean areActivated()
+    public static boolean isActivated()
     {
         for (Prayer p : Prayer.values())
         {
@@ -107,33 +96,7 @@ public enum Prayer
                 return true;
             }
         }
-        
+
         return false;
-    }
-
-    public static void activateNormalPrayers()
-    {
-        for (Prayer p : Prayer.values())
-        {
-            if (p.isNormal())
-            {
-                p.toggle();
-
-                Time.sleep(50);
-            }
-        }
-    }
-
-    public static void activateAncientPrayers()
-    {
-        for (Prayer p : Prayer.values())
-        {
-            if (!p.isNormal())
-            {
-                p.toggle();
-
-                Time.sleep(50);
-            }
-        }
     }
 }
