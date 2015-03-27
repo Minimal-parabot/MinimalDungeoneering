@@ -22,11 +22,6 @@ public class MinimalDungeoneeringGUI extends JFrame
     private JTextField weaponField;
     private JTextField legwearField;
 
-    private JLabel headwearLabel;
-    private JLabel bodyLabel;
-    private JLabel weaponLabel;
-    private JLabel legwearLabel;
-
     private int headwearId;
     private int bodyId;
     private int weaponId;
@@ -60,6 +55,11 @@ public class MinimalDungeoneeringGUI extends JFrame
         {
             setLayout(new GridBagLayout());
 
+            JLabel headwearLabel;
+            JLabel bodyLabel;
+            JLabel weaponLabel;
+            JLabel legwearLabel;
+
             // Gets the loaded or default values from our preferences
             headwearId = prefs.getInt("Headwear", -1);
             bodyId = prefs.getInt("Body", -1);
@@ -72,32 +72,31 @@ public class MinimalDungeoneeringGUI extends JFrame
             // Sets up the text for the field
             String fieldText;
 
-            // Headwear Field
-            fieldText = ((headwearId != -1) ? Integer.toString(headwearId) : "0");
-            headwearField = createTextField(fieldText);
+            headwearField = new JTextField((headwearId != -1) ? Integer.toString(headwearId) : "0", 4);
+            headwearField.setFont(FONT);
             c.gridx = 4;
             c.gridy = 0;
             add(headwearField, c);
 
             // Body Field
-            fieldText = ((bodyId != -1) ? Integer.toString(bodyId) : "0");
-            bodyField = createTextField(fieldText);
+            bodyField = new JTextField((bodyId != -1) ? Integer.toString(bodyId) : "0", 4);
+            bodyField.setFont(FONT);
             c.gridx = 4;
             c.gridy = 3;
             c.insets = new Insets(10, 0, 0, 0);
             add(bodyField, c);
 
             // Weapon Field
-            fieldText = ((weaponId != -1) ? Integer.toString(weaponId) : "0");
-            weaponField = createTextField(fieldText);
+            weaponField = new JTextField((weaponId != -1) ? Integer.toString(weaponId) : "0", 4);
+            weaponField.setFont(FONT);
             c.gridx = 2;
             c.gridy = 3;
             c.insets = new Insets(10, 0, 0, 10);
             add(weaponField, c);
 
             // Legwear field
-            fieldText = ((legwearId != -1) ? Integer.toString(legwearId) : "0");
-            legwearField = createTextField(fieldText);
+            legwearField = new JTextField((legwearId != -1) ? Integer.toString(legwearId) : "0", 4);
+            legwearField.setFont(FONT);
             c.insets = new Insets(10, 0, 0, 0);
             c.gridx = 4;
             c.gridy = 5;
@@ -105,15 +104,6 @@ public class MinimalDungeoneeringGUI extends JFrame
 
             // Default headwear
             headwearLabel = new JLabel(new ImageIcon(DEFAULT_HEADWEAR));
-            for (Equipment eq : Equipment.values())
-            {
-                if (Integer.parseInt(headwearField.getText()) == eq.getId())
-                {
-                    headwearLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                    break;
-                }
-            }
             c.insets = new Insets(0, 0, 0, 0);
             c.gridx = 4;
             c.gridy = 1;
@@ -121,15 +111,6 @@ public class MinimalDungeoneeringGUI extends JFrame
 
             // Default body
             bodyLabel = new JLabel(new ImageIcon(DEFAULT_BODY));
-            for (Equipment eq : Equipment.values())
-            {
-                if (Integer.parseInt(bodyField.getText()) == eq.getId())
-                {
-                    bodyLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                    break;
-                }
-            }
             c.gridx = 4;
             c.gridy = 4;
             c.insets = new Insets(0, 0, 0, 0);
@@ -137,15 +118,6 @@ public class MinimalDungeoneeringGUI extends JFrame
 
             // Default weapon
             weaponLabel = new JLabel(new ImageIcon(DEFAULT_WEAPON));
-            for (Equipment eq : Equipment.values())
-            {
-                if (Integer.parseInt(weaponField.getText()) == eq.getId())
-                {
-                    weaponLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                    break;
-                }
-            }
             c.gridx = 2;
             c.gridy = 4;
             c.insets = new Insets(0, 0, 0, 10);
@@ -153,175 +125,10 @@ public class MinimalDungeoneeringGUI extends JFrame
 
             // Default legwear
             legwearLabel = new JLabel(new ImageIcon(DEFAULT_LEGWEAR));
-            for (Equipment eq : Equipment.values())
-            {
-                if (Integer.parseInt(legwearField.getText()) == eq.getId())
-                {
-                    legwearLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                    break;
-                }
-            }
             c.insets = new Insets(0, 0, 0, 0);
             c.gridx = 4;
             c.gridy = 6;
             add(legwearLabel, c);
-        }
-
-        public JTextField createTextField(String str)
-        {
-            JTextField jTextField = new JTextField(4);
-
-            jTextField.setFont(FONT);
-            jTextField.setText(str);
-            jTextField.getDocument().addDocumentListener(new Listener());
-
-            return jTextField;
-        }
-    }
-
-    public class Listener implements DocumentListener
-    {
-        @Override
-        public void insertUpdate(DocumentEvent e)
-        {
-            try
-            {
-                if (e.getDocument() == headwearField.getDocument())
-                {
-                    for (Equipment eq : Equipment.values())
-                    {
-                        if (Integer.parseInt(headwearField.getText()) == eq.getId())
-                        {
-                            headwearLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                            break;
-                        }
-                        else
-                            headwearLabel.setIcon(new ImageIcon(DEFAULT_HEADWEAR));
-                    }
-                }
-                else if (e.getDocument() == bodyField.getDocument())
-                {
-                    for (Equipment eq : Equipment.values())
-                    {
-                        if (Integer.parseInt(bodyField.getText()) == eq.getId())
-                        {
-                            bodyLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                            break;
-                        }
-                        else
-                            bodyLabel.setIcon(new ImageIcon(DEFAULT_BODY));
-                    }
-                }
-                else if (e.getDocument() == weaponField.getDocument())
-                {
-                    for (Equipment eq : Equipment.values())
-                    {
-                        if (Integer.parseInt(weaponField.getText()) == eq.getId())
-                        {
-                            weaponLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                            break;
-                        }
-                        else
-                            weaponLabel.setIcon(new ImageIcon(DEFAULT_WEAPON));
-                    }
-                }
-                else if (e.getDocument() == legwearField.getDocument())
-                {
-                    for (Equipment eq : Equipment.values())
-                    {
-                        if (Integer.parseInt(legwearField.getText()) == eq.getId())
-                        {
-                            legwearLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                            break;
-                        }
-                        else
-                            legwearLabel.setIcon(new ImageIcon(DEFAULT_LEGWEAR));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void removeUpdate(DocumentEvent e)
-        {
-            try
-            {
-                if (e.getDocument() == headwearField.getDocument())
-                {
-                    for (Equipment eq : Equipment.values())
-                    {
-                        if (Integer.parseInt(headwearField.getText()) == eq.getId())
-                        {
-                            headwearLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                            break;
-                        }
-                        else
-                            headwearLabel.setIcon(new ImageIcon(DEFAULT_HEADWEAR));
-                    }
-                }
-                else if (e.getDocument() == bodyField.getDocument())
-                {
-                    for (Equipment eq : Equipment.values())
-                    {
-                        if (Integer.parseInt(bodyField.getText()) == eq.getId())
-                        {
-                            bodyLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                            break;
-                        }
-                        else
-                            bodyLabel.setIcon(new ImageIcon(DEFAULT_BODY));
-                    }
-                }
-                else if (e.getDocument() == weaponField.getDocument())
-                {
-                    for (Equipment eq : Equipment.values())
-                    {
-                        if (Integer.parseInt(weaponField.getText()) == eq.getId())
-                        {
-                            weaponLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                            break;
-                        }
-                        else
-                            weaponLabel.setIcon(new ImageIcon(DEFAULT_WEAPON));
-                    }
-                }
-                else if (e.getDocument() == legwearField.getDocument())
-                {
-                    for (Equipment eq : Equipment.values())
-                    {
-                        if (Integer.parseInt(legwearField.getText()) == eq.getId())
-                        {
-                            legwearLabel.setIcon(new ImageIcon(eq.getImage()));
-
-                            break;
-                        }
-                        else
-                            legwearLabel.setIcon(new ImageIcon(DEFAULT_LEGWEAR));
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                ex.printStackTrace();
-            }
-        }
-
-        @Override
-        public void changedUpdate(DocumentEvent e)
-        {
-            // This never even activates
         }
     }
     
@@ -362,7 +169,7 @@ public class MinimalDungeoneeringGUI extends JFrame
         }
         catch (NumberFormatException e)
         {
-            // e.printStackTrace();
+             e.printStackTrace();
         }
     }
     
@@ -378,6 +185,7 @@ public class MinimalDungeoneeringGUI extends JFrame
             public void run()
             {
                 MinimalDungeoneeringGUI gui = new MinimalDungeoneeringGUI();
+                gui.setVisible(true);
             }
         });
     }
