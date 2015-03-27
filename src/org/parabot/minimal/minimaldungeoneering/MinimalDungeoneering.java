@@ -34,6 +34,8 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
 {
     private final ArrayList<Strategy> strategies = new ArrayList<>();
 
+    private final Image IMG = getImage("http://i.imgur.com/08IiCkK.png");
+
     private Timer timer;
 
     public static String status = "";
@@ -86,15 +88,14 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
     @Override
     public void paint(Graphics g)
     {
-        // g.drawImage(IMG, 549, 263, null);
-
         g.setFont(new Font("Helvetica", Font.PLAIN, 14));
         g.setColor(new Color(31, 34, 50));
 
-        g.drawString("Time: " + timer.toString(), 560, 327);
-        g.drawString("Status: " + status, 560, 380);
-        g.drawString("Floors done: " + floorsCompleted, 560, 433);
-        g.drawString("Exp: " + (Skill.getCurrentExperience(23) - STARTING_EXP), 15, 15);
+        g.drawImage(IMG, 546, 209, null);
+        g.drawString(status, 15, 15);
+        g.drawString("Time: " + timer.toString(), 555, 271);
+        g.drawString("Floors done: " + floorsCompleted, 555, 330);
+        g.drawString("Exp: " + (Skill.getCurrentExperience(23) - STARTING_EXP), 555, 389);
     }
 
     @Override
