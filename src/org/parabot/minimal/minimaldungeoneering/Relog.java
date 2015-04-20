@@ -26,6 +26,7 @@ public class Relog implements Strategy
     {
 
         MinimalDungeoneering.status = "Possible dc";
+
         Time.sleep(new SleepCondition()
         {
             @Override

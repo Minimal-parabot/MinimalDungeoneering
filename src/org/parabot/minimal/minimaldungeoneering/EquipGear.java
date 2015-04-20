@@ -25,7 +25,7 @@ public class EquipGear implements Strategy
     @Override
     public boolean activate()
     {
-        return Inventory.getCount(ARMOR_IDS) > 0;
+        return Inventory.contains(ARMOR_IDS);
     }
 
     @Override
@@ -42,7 +42,7 @@ public class EquipGear implements Strategy
                 @Override
                 public boolean isValid()
                 {
-                    return Inventory.getCount(item.getId()) == 0;
+                    return !Inventory.contains(item.getId());
                 }
             }, 1000);
         }

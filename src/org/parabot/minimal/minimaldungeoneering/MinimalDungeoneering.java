@@ -40,8 +40,6 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
 
     public static String status = "";
 
-    public static boolean monsterVisible = false;
-
     /**
      * 9916 - Luminescent icefiend
      * 9989 - Asta Frost Web
@@ -55,6 +53,8 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
     private final int THOK_ID = 9713;
     private final int STARTING_EXP = Skill.getCurrentExperience(23);
     private int floorsCompleted = 0;
+
+    public static boolean monsterVisible = false;
 
     @Override
     public boolean onExecute()
@@ -110,15 +110,13 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
                 status = "Nulled";
                 forceLogout();
             }
-
-            if (message.contains("completed a dungeon"))
+            else if (message.contains("completed a dungeon"))
             {
                 floorsCompleted++;
 
                 monsterVisible = false;
             }
-
-            if (message.contains("your boss is"))
+            else if (message.contains("your boss is"))
             {
                 monsterVisible = true;
             }

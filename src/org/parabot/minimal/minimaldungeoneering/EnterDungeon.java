@@ -23,41 +23,34 @@ public class EnterDungeon implements Strategy
         this.THOK_ID = THOK_ID;
     }
 
-    private Npc thok;
-
     @Override
     public boolean activate()
     {
-        for (Npc n : Npcs.getNearest(THOK_ID))
-        {
-            if (n != null)
-            {
-                thok = n;
-
-                return true;
-            }
-        }
-
-        return false;
+        return Npcs.getNearest(THOK_ID).length > 0;
     }
 
     @Override
     public void execute()
     {
-        if (Game.getOpenBackDialogId() == -1)
+        if (Game.getOpenBackDialogId() != -1)
         {
             MinimalDungeoneering.status = "Talking to Thok";
 
-            thok.interact(0);
+            Npc thok = Npcs.getClosest(THOK_ID);
 
-            Time.sleep(new SleepCondition()
+            if (thok != null)
             {
-                @Override
-                public boolean isValid()
+                thok.interact(0);
+
+                Time.sleep(new SleepCondition()
                 {
-                    return Game.getOpenBackDialogId() == 4887;
-                }
-            }, 5000);
+                    @Override
+                    public boolean isValid()
+                    {
+                        return Game.getOpenBackDialogId() == 4887;
+                    }
+                }, 5000);
+            }
         }
 
         if (Game.getOpenBackDialogId() == 4887)
