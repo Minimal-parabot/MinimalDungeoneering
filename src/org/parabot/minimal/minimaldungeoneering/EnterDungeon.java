@@ -32,7 +32,7 @@ public class EnterDungeon implements Strategy
     @Override
     public void execute()
     {
-        if (Game.getOpenBackDialogId() != -1)
+        if (Game.getOpenBackDialogId() != 4887)
         {
             MinimalDungeoneering.status = "Talking to Thok";
 
