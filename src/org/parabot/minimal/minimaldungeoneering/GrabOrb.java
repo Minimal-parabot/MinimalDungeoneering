@@ -1,5 +1,6 @@
 package org.parabot.minimal.minimaldungeoneering;
 
+import org.parabot.core.ui.Logger;
 import org.parabot.environment.api.utils.Time;
 import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
@@ -18,82 +19,74 @@ import org.rev317.min.api.wrappers.TilePath;
  */
 public class GrabOrb implements Strategy
 {
-    private SceneObject crate;
-
-    private final Tile[] ORB_TILES = { new Tile(2609, 9835),
-                                       new Tile(2597, 9836),
-                                       new Tile(2586, 9838),
-                                       new Tile(2576, 9843),
+    private static final Tile[] ORB_TILES = { new Tile(2611, 9835),
+                                       new Tile(2605, 9837),
+                                       new Tile(2598, 9837),
+                                       new Tile(2588, 9837),
+                                       new Tile(2581, 9842),
                                        new Tile(2570, 9846),
                                        new Tile(2565, 9849) };
 
-    private final TilePath ORB_PATH = new TilePath(ORB_TILES);
+    private static final TilePath ORB_PATH = new TilePath(ORB_TILES);
 
-    private final Tile CRATE_TILE = new Tile(2563, 9847);
+    private static final Tile CRATE_TILE = new Tile(2563, 9847);
 
-    private final int CRATE_ID = 357;
-    private final int ORB_ID = 6822;
+    private static final int CRATE_ID = 357;
+    private static final int ORB_ID = 6822;
+    private static final int ROCK_ID = 1481;
 
     @Override
     public boolean activate()
     {
-        try
-        {
-            for (SceneObject so : SceneObjects.getAllSceneObjects())
-            {
-                if (so.getId() == CRATE_ID
-                        && so.getLocation().equals(CRATE_TILE)
-                        && Inventory.getCount(ORB_ID) == 0)
-                {
-                    crate = so;
-
-                    return true;
-                }
-            }
-        }
-        catch (NullPointerException e)
-        {
-//            e.printStackTrace();
-
-            Time.sleep(500);
-        }
-
-        return false;
+        return Inventory.contains(ROCK_ID)
+                && !Inventory.contains(ORB_ID);
     }
 
     @Override
     public void execute()
     {
-        if (!Players.getMyPlayer().getLocation().equals(ORB_TILES[5]))
+        SceneObject crate = null;
+
+        try
         {
-            MinimalDungeoneering.status = "Walking to orb";
+            for (SceneObject so : SceneObjects.getAllSceneObjects())
+            {
+                if (so.getId() == CRATE_ID && so.getLocation().equals(CRATE_TILE))
+                {
+                    crate = so;
+                }
+            }
+        }
+        catch (NullPointerException e)
+        {
+            e.printStackTrace();
+
+            Logger.addMessage("NullPointerException when getting all scene objects");
+        }
+
+        if (crate == null || !Players.getMyPlayer().getLocation().equals(ORB_TILES[ORB_TILES.length - 1]))
+        {
+            Logger.addMessage("Walking to orb");
 
             ORB_PATH.traverse();
 
-            Time.sleep(new SleepCondition()
-            {
-                @Override
-                public boolean isValid()
-                {
-                    return Players.getMyPlayer().getLocation() == ORB_TILES[5];
-                }
-            }, 500);
+            Time.sleep(1000);
         }
 
-        if (Players.getMyPlayer().getLocation().equals(ORB_TILES[5]))
+        if (crate != null && Players.getMyPlayer().getLocation().equals(ORB_TILES[ORB_TILES.length - 1]))
         {
-            MinimalDungeoneering.status = "Grabbing orb";
+            Logger.addMessage("Grabbing orb");
 
-            crate.interact(0);
+            crate.interact(SceneObjects.Option.FIRST);
 
             Time.sleep(new SleepCondition()
             {
                 @Override
                 public boolean isValid()
                 {
-                    return Inventory.getCount(ORB_ID) > 0;
+                    return Inventory.contains(ORB_ID);
                 }
-            }, 5000);
+            }, 3000);
         }
     }
 }

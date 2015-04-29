@@ -1,5 +1,6 @@
 package org.parabot.minimal.minimaldungeoneering;
 
+import org.parabot.core.ui.Logger;
 import org.parabot.environment.api.utils.Time;
 import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
@@ -13,11 +14,11 @@ import org.rev317.min.api.wrappers.Npc;
  */
 public class WaitBoss implements Strategy
 {
-    private final int[] BOSS_IDS;
+    private final int[] bossIds;
 
-    public WaitBoss(int[] BOSS_IDS)
+    public WaitBoss(int[] bossIds)
     {
-        this.BOSS_IDS = BOSS_IDS;
+        this.bossIds = bossIds;
     }
 
     private Npc boss;
@@ -25,10 +26,11 @@ public class WaitBoss implements Strategy
     @Override
     public boolean activate()
     {
-        for (Npc n : Npcs.getNearest(BOSS_IDS))
+        for (Npc n : Npcs.getNearest(bossIds))
         {
             if (n != null
-                    && n.isInCombat())
+                    && n.isInCombat()
+                    && n.getLocation().isReachable())
             {
                 boss = n;
 
@@ -41,14 +43,14 @@ public class WaitBoss implements Strategy
 
     public void execute()
     {
-        MinimalDungeoneering.status = "Waiting";
+        Logger.addMessage("Waiting for boss to die");
 
         Time.sleep(new SleepCondition()
         {
             @Override
             public boolean isValid()
             {
-                return Npcs.getNearest(BOSS_IDS).length == 0
+                return Npcs.getNearest(bossIds).length == 0
                         || boss.getHealth() == 0;
             }
         }, 1000);
@@ -56,7 +58,7 @@ public class WaitBoss implements Strategy
         if (boss.getHealth() == 0)
             MinimalDungeoneering.monsterVisible = false;
 
-        if (Npcs.getNearest(BOSS_IDS).length == 0)
-            Time.sleep(1500);
+        if (Npcs.getNearest(bossIds).length == 0)
+            Time.sleep(1000);
     }
 }

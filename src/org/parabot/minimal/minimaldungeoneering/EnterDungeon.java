@@ -1,5 +1,6 @@
 package org.parabot.minimal.minimaldungeoneering;
 
+import org.parabot.core.ui.Logger;
 import org.parabot.environment.api.utils.Time;
 import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
@@ -26,93 +27,46 @@ public class EnterDungeon implements Strategy
     @Override
     public boolean activate()
     {
-        return Npcs.getNearest(THOK_ID).length > 0;
+        return Npcs.getNearest(THOK_ID).length > 0
+                && Npcs.getClosest(THOK_ID).distanceTo() < 20;
     }
 
     @Override
     public void execute()
     {
-        if (Game.getOpenBackDialogId() != 4887)
+        if (Game.getOpenBackDialogId() == -1 || Game.getOpenBackDialogId() == 4900)
         {
-            MinimalDungeoneering.status = "Talking to Thok";
+            Logger.addMessage("Talking to Thok");
 
             Npc thok = Npcs.getClosest(THOK_ID);
 
             if (thok != null)
             {
-                thok.interact(0);
+                thok.interact(Npcs.Option.THIRD);
 
                 Time.sleep(new SleepCondition()
                 {
                     @Override
                     public boolean isValid()
                     {
-                        return Game.getOpenBackDialogId() == 4887;
+                        return Game.getOpenBackDialogId() == 2469;
                     }
                 }, 5000);
             }
         }
 
-        if (Game.getOpenBackDialogId() == 4887)
-        {
-            MinimalDungeoneering.status = "Continuing";
-
-            Menu.sendAction(679, -1, -1, 4982);
-
-            Time.sleep(new SleepCondition()
-            {
-                @Override
-                public boolean isValid()
-                {
-                    return Game.getOpenBackDialogId() == 2469;
-                }
-            }, 1000);
-
-            Time.sleep(250);
-        }
-
-        if (Game.getOpenBackDialogId() == 2469
-                && Loader.getClient().getInterfaceCache()[2471].getMessage().equals("Start Dungeoneering"))
-        {
-            MinimalDungeoneering.status = "Starting";
-
-            Menu.sendAction(315, -1, -1, 2471);
-
-            Time.sleep(new SleepCondition()
-            {
-                @Override
-                public boolean isValid()
-                {
-                    return Game.getOpenBackDialogId() == 2459;
-                }
-            }, 1000);
-
-            Time.sleep(250);
-        }
-
-        if (Game.getOpenBackDialogId() == 2459)
-        {
-            MinimalDungeoneering.status = "Single";
-
-            Menu.sendAction(315, -1, -1, 2461);
-
-            Time.sleep(new SleepCondition()
-            {
-                @Override
-                public boolean isValid()
-                {
-                    return Game.getOpenBackDialogId() == 2469;
-                }
-            }, 1000);
-
-            Time.sleep(250);
-        }
-
         if (Game.getOpenBackDialogId() == 2469)
         {
-            MinimalDungeoneering.status = "Floor 2";
+            Logger.addMessage("Entering " + MinimalDungeoneering.mode);
 
-            Menu.sendAction(315, -1, -1, 2472);
+            if (MinimalDungeoneering.mode == Mode.SECOND_FLOOR)
+            {
+                Menu.sendAction(315, -1, -1, 2472);
+            }
+            else if (MinimalDungeoneering.mode == Mode.THIRD_FLOOR)
+            {
+                Menu.sendAction(315, -1, -1, 2473);
+            }
 
             Time.sleep(new SleepCondition()
             {
@@ -121,16 +75,14 @@ public class EnterDungeon implements Strategy
                 {
                     return Npcs.getNearest(THOK_ID).length == 0;
                 }
-            }, 2500);
-
-            Time.sleep(250);
+            }, 5000);
         }
 
         if (Npcs.getNearest(THOK_ID).length == 0)
         {
-            MinimalDungeoneering.status = "Waiting";
+            Logger.addMessage("Waiting for 8 seconds");
 
-            Time.sleep(8500);
+            Time.sleep(8000);
         }
     }
 }

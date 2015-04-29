@@ -1,8 +1,6 @@
 package org.parabot.minimal.minimaldungeoneering;
 
 import javax.swing.*;
-import javax.swing.event.DocumentEvent;
-import javax.swing.event.DocumentListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -33,7 +31,7 @@ public class MinimalDungeoneeringGUI extends JFrame
     {
         setLayout(new GridBagLayout());
         setVisible(true);
-        setSize(200, 300);
+        setSize(250, 300);
         setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 
         GridBagConstraints c = new GridBagConstraints();
@@ -42,6 +40,11 @@ public class MinimalDungeoneeringGUI extends JFrame
         c.gridx = 0;
         c.gridy = 0;
         add(armorPanel, c);
+
+        JPanel modePanel = new ModePanel();
+        c.gridx = 1;
+        c.gridy = 0;
+        add(modePanel, c);
 
         JPanel buttonPanel = new ButtonPanel();
         c.gridx = 0;
@@ -68,9 +71,6 @@ public class MinimalDungeoneeringGUI extends JFrame
 
             GridBagConstraints c = new GridBagConstraints();
             c.fill = GridBagConstraints.HORIZONTAL;
-
-            // Sets up the text for the field
-            String fieldText;
 
             headwearField = new JTextField((headwearId != -1) ? Integer.toString(headwearId) : "0", 4);
             headwearField.setFont(FONT);
@@ -129,6 +129,57 @@ public class MinimalDungeoneeringGUI extends JFrame
             c.gridx = 4;
             c.gridy = 6;
             add(legwearLabel, c);
+        }
+    }
+
+    public class ModePanel extends JPanel
+    {
+        public ModePanel()
+        {
+            setLayout(new GridBagLayout());
+
+            GridBagConstraints c = new GridBagConstraints();
+
+            ButtonGroup bg = new ButtonGroup();
+
+            final JRadioButton secondFloorButton = new JRadioButton("Second Floor");
+            secondFloorButton.setFont(FONT);
+            secondFloorButton.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    if (secondFloorButton.isSelected())
+                    {
+                        MinimalDungeoneering.mode = Mode.SECOND_FLOOR;
+                    }
+                }
+            });
+
+            c.gridx = 0;
+            c.gridy = 0;
+            add(secondFloorButton, c);
+
+            final JRadioButton thirdFloorButton = new JRadioButton("Third Floor");
+            thirdFloorButton.setFont(FONT);
+            thirdFloorButton.addActionListener(new ActionListener()
+            {
+                @Override
+                public void actionPerformed(ActionEvent e)
+                {
+                    if (thirdFloorButton.isSelected())
+                    {
+                        MinimalDungeoneering.mode = Mode.THIRD_FLOOR;
+                    }
+                }
+            });
+
+            c.gridx = 0;
+            c.gridy = 1;
+            add(thirdFloorButton, c);
+
+            bg.add(secondFloorButton);
+            bg.add(thirdFloorButton);
         }
     }
     

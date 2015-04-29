@@ -1,5 +1,6 @@
 package org.parabot.minimal.minimaldungeoneering;
 
+import org.parabot.core.ui.Logger;
 import org.parabot.environment.api.interfaces.Paintable;
 import org.parabot.environment.api.utils.Timer;
 import org.parabot.environment.scripts.Category;
@@ -7,63 +8,52 @@ import org.parabot.environment.scripts.Script;
 import org.parabot.environment.scripts.ScriptManifest;
 import org.parabot.environment.scripts.framework.Strategy;
 import org.rev317.min.Loader;
-import org.rev317.min.accessors.Ground;
-import org.rev317.min.accessors.SceneObjectTile;
 import org.rev317.min.api.events.MessageEvent;
 import org.rev317.min.api.events.listeners.MessageListener;
 import org.rev317.min.api.methods.*;
-import org.rev317.min.api.wrappers.SceneObject;
 
 import javax.imageio.ImageIO;
+import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Collection;
 
 @ScriptManifest(author = "Minimal",
         category = Category.DUNGEONEERING,
         description = "A dungeoneering script that completes Floor 2 on Ikov.",
         name = "Minimal Dungeoneering",
         servers = { "Ikov" },
-        version = 1.1)
+        version = 0.3)
 
 public class MinimalDungeoneering extends Script implements Paintable, MessageListener
 {
     private final ArrayList<Strategy> strategies = new ArrayList<>();
 
-    private final Image IMG = getImage("http://i.imgur.com/08IiCkK.png");
+    private static final Image IMG = getImage("http://i.imgur.com/08IiCkK.png");
 
-    private Timer timer;
+    private Timer timer = new Timer();
 
-    public static String status = "";
+    public static Mode mode;
 
-    /**
-     * 9916 - Luminescent icefiend
-     * 9989 - Asta Frost Web
-     * 10044 - Icy Bones
-     * 10064 - Hobgoblin Geomancer
-     * 10110 - Bulkwark Beast
-     * 10116 - Unholy Cursebearer
-     */
-    private final int[] BOSS_IDS = { 9916, 9989, 10044, 10064, 10110, 10116 };
-
-    private final int THOK_ID = 9713;
-    private final int STARTING_EXP = Skill.getCurrentExperience(23);
+    private static final int THOK_ID = 9713;
+    private static final int STARTING_EXP = Skill.getCurrentExperience(23);
     private int floorsCompleted = 0;
+    private int deathCount;
 
     public static boolean monsterVisible = false;
 
     @Override
     public boolean onExecute()
     {
-        timer = new Timer();
-        int[] armor;
+        JOptionPane.showMessageDialog(null, "Post proggies on the thread!");
 
         MinimalDungeoneeringGUI gui = new MinimalDungeoneeringGUI();
         gui.setVisible(true);
+
+        int[] armor;
 
         while(gui.isVisible())
         {
@@ -74,13 +64,25 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
 
         strategies.add(new Relog());
         strategies.add(new EnterDungeon(THOK_ID));
-        strategies.add(new ForceExit(BOSS_IDS, THOK_ID));
         strategies.add(new EquipGear(armor));
-        strategies.add(new WaitBoss(BOSS_IDS));
-        strategies.add(new KillBoss(BOSS_IDS));
-        strategies.add(new GrabRock());
-        strategies.add(new GrabOrb());
-        strategies.add(new TouchShrine(BOSS_IDS));
+        strategies.add(new Boss());
+
+        if (mode == Mode.SECOND_FLOOR)
+        {
+            strategies.add(new GrabRock());
+            strategies.add(new GrabOrb());
+            strategies.add(new TouchShrine());
+        }
+        else if (mode == Mode.THIRD_FLOOR)
+        {
+            strategies.add(new Consume());
+            strategies.add(new FirstStage());
+            strategies.add(new SecondStage());
+            strategies.add(new ThirdStage());
+            strategies.add(new FourthStage());
+            strategies.add(new FifthStage());
+        }
+
         provide(strategies);
         return true;
     }
@@ -92,10 +94,10 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
         g.setColor(new Color(31, 34, 50));
 
         g.drawImage(IMG, 546, 209, null);
-        g.drawString(status, 15, 15);
         g.drawString("Time: " + timer.toString(), 555, 271);
         g.drawString("Floors done: " + floorsCompleted, 555, 330);
         g.drawString("Exp: " + (Skill.getCurrentExperience(23) - STARTING_EXP), 555, 389);
+        g.drawString("Deaths: " + deathCount, 555, 448);
     }
 
     @Override
@@ -107,7 +109,8 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
 
             if (message.contains("object"))
             {
-                status = "Nulled";
+                Logger.addMessage("Account was nulled");
+
                 forceLogout();
             }
             else if (message.contains("completed a dungeon"))
@@ -119,6 +122,10 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
             else if (message.contains("your boss is"))
             {
                 monsterVisible = true;
+            }
+            else if (message.contains("oh dear,") || message.contains("lifepoints!"))
+            {
+                deathCount++;
             }
         }
     }

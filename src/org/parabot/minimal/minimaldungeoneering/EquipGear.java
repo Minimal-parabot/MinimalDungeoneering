@@ -1,7 +1,7 @@
 package org.parabot.minimal.minimaldungeoneering;
 
+import org.parabot.core.ui.Logger;
 import org.parabot.environment.api.utils.Time;
-import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
 import org.rev317.min.api.methods.Game;
 import org.rev317.min.api.methods.Inventory;
@@ -15,58 +15,50 @@ import org.rev317.min.api.wrappers.Item;
  */
 public class EquipGear implements Strategy
 {
-    private final int[] ARMOR_IDS;
+    private final int[] armorIds;
     
-    public EquipGear(int[] ARMOR_IDS)
+    public EquipGear(int[] armorIds)
     {
-        this.ARMOR_IDS = ARMOR_IDS;
+        this.armorIds = armorIds;
     }
 
     @Override
     public boolean activate()
     {
-        return Inventory.contains(ARMOR_IDS);
+        return Inventory.contains(armorIds);
     }
 
     @Override
     public void execute()
     {
-        MinimalDungeoneering.status = "Equipping";
+        Logger.addMessage("Equipping armor");
 
-        for (final Item item : Inventory.getItems(ARMOR_IDS))
+        for (Item item : Inventory.getItems(armorIds))
         {
             Menu.sendAction(454, item.getId() - 1, item.getSlot(), 3214);
 
-            Time.sleep(new SleepCondition()
-            {
-                @Override
-                public boolean isValid()
-                {
-                    return !Inventory.contains(item.getId());
-                }
-            }, 1000);
-        }
-        
-        if (!Prayer.isActivated())
-        {
-            MinimalDungeoneering.status = "Praying";
-
-            Prayer.toggle();
-
-            Time.sleep(new SleepCondition()
-            {
-                @Override
-                public boolean isValid()
-                {
-                    return Prayer.isActivated();
-                }
-            }, 1000);
+            Time.sleep(500);
         }
 
         // Toggles auto-retaliate
-        if (Game.getSetting(172) > 0)
+
+        if (MinimalDungeoneering.mode == Mode.SECOND_FLOOR)
         {
-            Menu.sendAction(169, -1, -1, 150);
+            if (Game.getSetting(172) != 0)
+            {
+                Logger.addMessage("Disabling auto-retaliate");
+
+                Menu.sendAction(169, -1, -1, 150);
+            }
+        }
+        else if (MinimalDungeoneering.mode == Mode.THIRD_FLOOR)
+        {
+            if (Game.getSetting(172) == 0)
+            {
+                Logger.addMessage("Enabling auto-retaliate");
+
+                Menu.sendAction(169, -1, -1, 150);
+            }
         }
     }
 }

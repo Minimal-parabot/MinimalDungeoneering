@@ -1,5 +1,6 @@
 package org.parabot.minimal.minimaldungeoneering;
 
+import org.parabot.core.ui.Logger;
 import org.parabot.environment.api.utils.Time;
 import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
@@ -13,14 +14,7 @@ import org.rev317.min.api.wrappers.SceneObject;
  */
 public class TouchShrine implements Strategy
 {
-    private final int[] BOSS_IDS;
-
-    public TouchShrine(int[] BOSS_IDS)
-    {
-        this.BOSS_IDS = BOSS_IDS;
-    }
-
-    private SceneObject shrine;
+    private static final int[] BOSS_IDS = { 9916, 9934, 9989, 10044, 10064, 10110, 10116 };
 
     private final int SHRINE_ID = 3634;
     private final int ORB_ID = 6822;
@@ -29,18 +23,21 @@ public class TouchShrine implements Strategy
     @Override
     public boolean activate()
     {
+        return Inventory.contains(ROCK_ID, ORB_ID);
+    }
+
+    @Override
+    public void execute()
+    {
+        SceneObject shrine = null;
+
         try
         {
             for (SceneObject so : SceneObjects.getAllSceneObjects())
             {
-                if (so.getId() == SHRINE_ID
-                        && so.distanceTo() < 10
-                        && Npcs.getNearest(BOSS_IDS).length == 0
-                        && Inventory.getCount(ORB_ID, ROCK_ID) == 2)
+                if (so.getId() == SHRINE_ID)
                 {
                     shrine = so;
-
-                    return true;
                 }
             }
         }
@@ -48,26 +45,23 @@ public class TouchShrine implements Strategy
         {
             e.printStackTrace();
 
-            Time.sleep(500);
+            Logger.addMessage("NullPointerException when getting all scene objects");
         }
 
-        return false;
-    }
-
-    @Override
-    public void execute()
-    {
-        MinimalDungeoneering.status = "Touching shrine";
-
-        shrine.interact(0);
-
-        Time.sleep(new SleepCondition()
+        if (shrine != null)
         {
-            @Override
-            public boolean isValid()
+            Logger.addMessage("Touching shrine");
+
+            shrine.interact(SceneObjects.Option.FIRST);
+
+            Time.sleep(new SleepCondition()
             {
-                return Npcs.getNearest(BOSS_IDS).length > 0;
-            }
-        }, 5000);
+                @Override
+                public boolean isValid()
+                {
+                    return Npcs.getNearest(BOSS_IDS).length > 0;
+                }
+            }, 5000);
+        }
     }
 }
