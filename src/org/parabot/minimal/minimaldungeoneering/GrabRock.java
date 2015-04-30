@@ -17,6 +17,13 @@ import org.rev317.min.api.wrappers.TilePath;
  */
 public class GrabRock implements Strategy
 {
+    private final int rockId;
+
+    public GrabRock(int rockId)
+    {
+        this.rockId = rockId;
+    }
+
     private static final Tile[] SCULPTURE_TILES = { new Tile(2613, 9810),
              new Tile(2610, 9821),
              new Tile(2607, 9828),
@@ -25,12 +32,11 @@ public class GrabRock implements Strategy
     private static final TilePath SCULPTURE_PATH = new TilePath(SCULPTURE_TILES);
 
     private static final int SCULPTURE_ID = 5808;
-    private static final int ROCK_ID = 1481;
 
     @Override
     public boolean activate()
     {
-        return !Inventory.contains(ROCK_ID);
+        return !Inventory.contains(rockId);
     }
 
     @Override
@@ -89,7 +95,7 @@ public class GrabRock implements Strategy
                 @Override
                 public boolean isValid()
                 {
-                    return Inventory.contains(ROCK_ID);
+                    return Inventory.contains(rockId);
                 }
             }, 3000);
         }

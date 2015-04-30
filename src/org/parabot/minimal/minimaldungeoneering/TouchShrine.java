@@ -14,16 +14,25 @@ import org.rev317.min.api.wrappers.SceneObject;
  */
 public class TouchShrine implements Strategy
 {
-    private static final int[] BOSS_IDS = { 9916, 9934, 9989, 10044, 10064, 10110, 10116 };
+    private final int[] bossIds;
 
-    private final int SHRINE_ID = 3634;
-    private final int ORB_ID = 6822;
-    private final int ROCK_ID = 1481;
+    private final int rockId;
+    private final int orbId;
+
+    public TouchShrine(int[] bossIds, int rockId, int orbId)
+    {
+        this.bossIds = bossIds;
+
+        this.rockId = rockId;
+        this.orbId = orbId;
+    }
+
+    private static final int SHRINE_ID = 3634;
 
     @Override
     public boolean activate()
     {
-        return Inventory.contains(ROCK_ID, ORB_ID);
+        return Inventory.contains(rockId, orbId);
     }
 
     @Override
@@ -59,7 +68,7 @@ public class TouchShrine implements Strategy
                 @Override
                 public boolean isValid()
                 {
-                    return Npcs.getNearest(BOSS_IDS).length > 0;
+                    return Npcs.getNearest(bossIds).length > 0;
                 }
             }, 5000);
         }

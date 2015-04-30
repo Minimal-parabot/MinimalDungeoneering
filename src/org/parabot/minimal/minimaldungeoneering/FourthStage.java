@@ -13,6 +13,13 @@ import org.rev317.min.api.wrappers.TilePath;
 
 public class FourthStage implements Strategy
 {
+    private final int passageWayId;
+
+    public FourthStage(int passageWayId)
+    {
+        this.passageWayId = passageWayId;
+    }
+
     private static final Area FOURTH_STAGE_AREA = new Area(new Tile(2956, 5068),
             new Tile(2956, 5034),
             new Tile(2966, 5034),
@@ -23,8 +30,6 @@ public class FourthStage implements Strategy
 
     private static final TilePath TILE_PATH = new TilePath(TILE_ARRAY);
 
-    private static final int PASSAGEWAY_ID = 7219;
-
     @Override
     public boolean activate()
     {
@@ -34,8 +39,8 @@ public class FourthStage implements Strategy
     @Override
     public void execute()
     {
-        if (SceneObjects.getClosest(PASSAGEWAY_ID) == null
-                || SceneObjects.getClosest(PASSAGEWAY_ID).distanceTo() >= 15)
+        if (SceneObjects.getClosest(passageWayId) == null
+                || SceneObjects.getClosest(passageWayId).distanceTo() >= 15)
         {
             Logger.addMessage("Traversing to passageway");
 
@@ -44,11 +49,11 @@ public class FourthStage implements Strategy
             Time.sleep(1000);
         }
 
-        if (SceneObjects.getClosest(PASSAGEWAY_ID).distanceTo() < 15)
+        if (SceneObjects.getClosest(passageWayId).distanceTo() < 15)
         {
             Logger.addMessage("Entering passageway");
 
-            SceneObject passageWay = SceneObjects.getClosest(PASSAGEWAY_ID);
+            SceneObject passageWay = SceneObjects.getClosest(passageWayId);
 
             if (passageWay != null)
             {

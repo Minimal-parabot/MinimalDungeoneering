@@ -12,14 +12,18 @@ import org.rev317.min.api.wrappers.Tile;
 
 public class FifthStage implements Strategy
 {
+    private final int passageWayId;
+
+    public FifthStage(int passageWayId)
+    {
+        this.passageWayId = passageWayId;
+    }
     private static final Area FIFTH_STAGE_AREA = new Area(new Tile(2954, 5094),
             new Tile(2954, 5071),
             new Tile(2958, 5071),
             new Tile(2958, 5094));
 
     private static final Tile MIDDLE_TILE = new Tile(2956, 5083);
-
-    private static final int PASSAGEWAY_ID = 7219;
 
     @Override
     public boolean activate()
@@ -32,7 +36,7 @@ public class FifthStage implements Strategy
     {
         SceneObject passageWay = null;
 
-        for (SceneObject so : SceneObjects.getNearest(PASSAGEWAY_ID))
+        for (SceneObject so : SceneObjects.getNearest(passageWayId))
         {
             if (so.getLocation().getX() == 2955)
             {
@@ -44,6 +48,8 @@ public class FifthStage implements Strategy
 
         if (passageWay == null)
         {
+            Logger.addMessage("Traversing to passageway");
+
             MIDDLE_TILE.walkTo();
 
             Time.sleep(new SleepCondition()
@@ -51,7 +57,7 @@ public class FifthStage implements Strategy
                 @Override
                 public boolean isValid()
                 {
-                    return SceneObjects.getNearest(PASSAGEWAY_ID).length > 0;
+                    return SceneObjects.getNearest(passageWayId).length > 0;
                 }
             }, 3000);
         }

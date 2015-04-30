@@ -12,12 +12,14 @@ public class Consume implements Strategy
 {
     private static final int FOOD_ID = 18156;
     private static final int POTION_ID = 3025;
-    private static final int HALF_HEALTH = Skill.HITPOINTS.getRealLevel() / 2;
+
+    private double healthThreshold = Skill.HITPOINTS.getRealLevel() * 0.6;
+
 
     @Override
     public boolean activate()
     {
-        return Skill.HITPOINTS.getLevel() < HALF_HEALTH
+        return Skill.HITPOINTS.getLevel() < healthThreshold
                 && Inventory.contains(FOOD_ID)
                 || Skill.PRAYER.getLevel() < 15
                 && Inventory.contains(POTION_ID);
@@ -26,7 +28,7 @@ public class Consume implements Strategy
     @Override
     public void execute()
     {
-        if (Skill.HITPOINTS.getLevel() < HALF_HEALTH)
+        if (Skill.HITPOINTS.getLevel() < healthThreshold)
         {
             Logger.addMessage("Eating");
 

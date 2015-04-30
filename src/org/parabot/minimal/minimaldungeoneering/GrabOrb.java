@@ -19,11 +19,20 @@ import org.rev317.min.api.wrappers.TilePath;
  */
 public class GrabOrb implements Strategy
 {
+    private final int rockId;
+    private final int orbId;
+
+    public GrabOrb(int rockId, int orbId)
+    {
+        this.rockId = rockId;
+        this.orbId = orbId;
+    }
     private static final Tile[] ORB_TILES = { new Tile(2611, 9835),
                                        new Tile(2605, 9837),
                                        new Tile(2598, 9837),
                                        new Tile(2588, 9837),
                                        new Tile(2581, 9842),
+                                       new Tile(2576, 9842),
                                        new Tile(2570, 9846),
                                        new Tile(2565, 9849) };
 
@@ -32,14 +41,13 @@ public class GrabOrb implements Strategy
     private static final Tile CRATE_TILE = new Tile(2563, 9847);
 
     private static final int CRATE_ID = 357;
-    private static final int ORB_ID = 6822;
-    private static final int ROCK_ID = 1481;
+
 
     @Override
     public boolean activate()
     {
-        return Inventory.contains(ROCK_ID)
-                && !Inventory.contains(ORB_ID);
+        return Inventory.contains(rockId)
+                && !Inventory.contains(orbId);
     }
 
     @Override
@@ -84,7 +92,7 @@ public class GrabOrb implements Strategy
                 @Override
                 public boolean isValid()
                 {
-                    return Inventory.contains(ORB_ID);
+                    return Inventory.contains(orbId);
                 }
             }, 3000);
         }
