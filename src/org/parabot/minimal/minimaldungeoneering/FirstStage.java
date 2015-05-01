@@ -5,9 +5,11 @@ import org.parabot.environment.api.utils.Time;
 import org.parabot.environment.scripts.framework.SleepCondition;
 import org.parabot.environment.scripts.framework.Strategy;
 import org.rev317.min.api.methods.Inventory;
+import org.rev317.min.api.methods.Menu;
 import org.rev317.min.api.methods.Players;
 import org.rev317.min.api.methods.SceneObjects;
 import org.rev317.min.api.wrappers.Area;
+import org.rev317.min.api.wrappers.Item;
 import org.rev317.min.api.wrappers.SceneObject;
 import org.rev317.min.api.wrappers.Tile;
 
@@ -21,6 +23,8 @@ public class FirstStage implements Strategy
 
     private static final int CHEST_ID = 2079;
     private static final int CONTORTION_BARS_ID = 7251;
+
+    private static final int[] OVERLOAD_IDS = new int[] { 15333, 15334, 15335, 15336 };
 
     @Override
     public boolean activate()
@@ -71,6 +75,20 @@ public class FirstStage implements Strategy
         if (Inventory.getCount() >= 20
                 && Prayer.isActivated())
         {
+            if (Inventory.contains(OVERLOAD_IDS))
+            {
+                Item overload = Inventory.getItems(OVERLOAD_IDS)[0];
+
+                if (overload != null)
+                {
+                    Logger.addMessage("Drinking overload");
+
+                    Menu.sendAction(74, overload.getId() - 1, overload.getSlot(), 3214);
+
+                    Time.sleep(500);
+                }
+            }
+
             Logger.addMessage("Entering contortion bars");
 
             SceneObject contortionBars = SceneObjects.getClosest(CONTORTION_BARS_ID);

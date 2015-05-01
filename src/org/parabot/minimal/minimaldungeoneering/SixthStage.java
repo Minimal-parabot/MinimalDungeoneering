@@ -10,11 +10,11 @@ import org.rev317.min.api.wrappers.Area;
 import org.rev317.min.api.wrappers.Npc;
 import org.rev317.min.api.wrappers.Tile;
 
-public class Boss implements Strategy
+public class SixthStage implements Strategy
 {
     private final int[] bossIds;
 
-    public Boss(int[] bossIds)
+    public SixthStage(int[] bossIds)
     {
         this.bossIds = bossIds;
     }
@@ -24,13 +24,17 @@ public class Boss implements Strategy
             new Tile(2976, 5097),
             new Tile(2976, 5111));
 
+    // South-most 5097
+    // North-most 5111
+    // East-most 2976
+    // West-most 2949
     @Override
     public boolean activate()
     {
-        return MinimalDungeoneering.mode == Mode.SECOND_FLOOR && Npcs.getNearest(bossIds).length > 0
-                || MinimalDungeoneering.mode == Mode.THIRD_FLOOR && SIXTH_STAGE_AREA.contains(Players.getMyPlayer().getLocation());
+        return SIXTH_STAGE_AREA.contains(Players.getMyPlayer().getLocation());
     }
 
+    @Override
     public void execute()
     {
         final Npc boss = Npcs.getClosest(bossIds);
@@ -50,7 +54,7 @@ public class Boss implements Strategy
                     {
                         return boss.isInCombat();
                     }
-                }, 2000);
+                }, 2500);
             }
 
             if (boss.isInCombat())

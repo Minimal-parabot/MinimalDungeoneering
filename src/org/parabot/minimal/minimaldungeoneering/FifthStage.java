@@ -48,18 +48,11 @@ public class FifthStage implements Strategy
 
         if (passageWay == null)
         {
-            Logger.addMessage("Traversing to passageway");
+            Logger.addMessage("Traversing to middle tile");
 
             MIDDLE_TILE.walkTo();
 
-            Time.sleep(new SleepCondition()
-            {
-                @Override
-                public boolean isValid()
-                {
-                    return SceneObjects.getNearest(passageWayId).length > 0;
-                }
-            }, 3000);
+            Time.sleep(1000);
         }
 
         if (passageWay != null)

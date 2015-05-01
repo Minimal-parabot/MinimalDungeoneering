@@ -24,10 +24,10 @@ import java.util.ArrayList;
 
 @ScriptManifest(author = "Minimal",
         category = Category.DUNGEONEERING,
-        description = "A dungeoneering script that completes Floor 2 on Ikov.",
+        description = "A dungeoneering script that completes Floor 2 and Floor 3 on Ikov. Floor 3 is buggy, use only when babysitting.",
         name = "Minimal Dungeoneering",
         servers = { "Ikov" },
-        version = 0.4)
+        version = 0.5)
 
 public class MinimalDungeoneering extends Script implements Paintable, MessageListener
 {
@@ -36,7 +36,7 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
     private static final Image IMG = getImage("http://i.imgur.com/08IiCkK.png");
 
     private Timer timer = new Timer();
-    private Timer secondaryTimer = new Timer(240000);
+    public static Timer secondaryTimer = new Timer(240000);
 
     public static Mode mode;
 
@@ -77,6 +77,7 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
         armor = gui.getArmor();
 
         strategies.add(new Relog());
+        strategies.add(new TimerFailsafe());
         strategies.add(new EnterDungeon(THOK_ID));
         strategies.add(new EquipGear(armor));
         strategies.add(new Consume());
@@ -118,15 +119,6 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
     @Override
     public void messageReceived(MessageEvent m)
     {
-        if (secondaryTimer.getRemaining() <= 0)
-        {
-            Logger.addMessage("Secondary timer has ran out - the dungeon may have been bugged.");
-
-            secondaryTimer.restart();
-
-            forceLogout();
-        }
-
         if (m.getType() == 0)
         {
             String message = m.getMessage().toLowerCase();

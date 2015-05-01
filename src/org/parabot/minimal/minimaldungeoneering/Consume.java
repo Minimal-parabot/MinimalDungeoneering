@@ -11,24 +11,24 @@ import org.rev317.min.api.wrappers.Item;
 public class Consume implements Strategy
 {
     private static final int FOOD_ID = 18156;
-    private static final int POTION_ID = 3025;
+    private static final int SUPER_RESTORE_ID = 3025;
 
-    private double healthThreshold = Skill.HITPOINTS.getRealLevel() * 0.6;
+    private double healthThreshold = ((Skill.HITPOINTS.getRealLevel() > 99) ? 99 : Skill.HITPOINTS.getRealLevel()) * 0.6;
 
 
     @Override
     public boolean activate()
     {
-        return Skill.HITPOINTS.getLevel() < healthThreshold
+        return Skill.HITPOINTS.getLevel() <= healthThreshold
                 && Inventory.contains(FOOD_ID)
                 || Skill.PRAYER.getLevel() < 15
-                && Inventory.contains(POTION_ID);
+                && Inventory.contains(SUPER_RESTORE_ID);
     }
 
     @Override
     public void execute()
     {
-        if (Skill.HITPOINTS.getLevel() < healthThreshold)
+        if (Skill.HITPOINTS.getLevel() <= healthThreshold)
         {
             Logger.addMessage("Eating");
 
@@ -37,22 +37,20 @@ public class Consume implements Strategy
             if (food != null)
             {
                 Menu.sendAction(74, food.getId() - 1, food.getSlot(), 3214);
-
-                Time.sleep(500);
             }
         }
-        else
+        else if (Skill.PRAYER.getLevel() < 15)
         {
-            Logger.addMessage("Drinking");
+            Logger.addMessage("Drinking Super restore");
 
-            Item potion = Inventory.getItem(POTION_ID);
+            Item potion = Inventory.getItem(SUPER_RESTORE_ID);
 
             if (potion != null)
             {
                 Menu.sendAction(74, potion.getId() - 1, potion.getSlot(), 3214);
-
-                Time.sleep(500);
             }
         }
+
+        Time.sleep(750);
     }
 }
