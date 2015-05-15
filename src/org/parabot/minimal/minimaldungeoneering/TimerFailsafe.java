@@ -15,7 +15,7 @@ public class TimerFailsafe implements Strategy
     @Override
     public void execute()
     {
-        Logger.addMessage("Secondary timer has ran out - the dungeon may have been bugged.");
+        Logger.addMessage("Secondary timer has ran out - the dungeon may have been bugged.", true);
 
         MinimalDungeoneering.secondaryTimer.restart();
 

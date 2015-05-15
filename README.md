@@ -1,7 +1,4 @@
-# Minimal Dungeoneering
-## Free
-Like all Minimal scripts, Minimal Dungeoneering is free. Why should you pay $10 for a script that you have to babysit? At that rate an autoclicker would be better, more reliable, and cheaper!
-## Experienced
-The API is used to the fullest in Minimal Dungeoneering to bring you the quickest, most reliable performance. Sleep conditions ensure that no computer gets left behind while at the same time not needed faster ones to wait longer than necessary.
-## Smart
-The GUI recognizes every time the fields are changed and lets you know what item you are on if it recognizes the ID.
+##Creation
+After seeing a demand for an Ikov dungeoneering script, I decided to create my own. Before mine, there weren't really any quality dungeoneering scripts on the BDN. This is my first combat script that has been released and I'm happy with it so far. There were a lot of bugs during the first few revisions but I was able to squash most of them and give the community a solid script. I decided to make it free because I've always hated it when scripts that don't make large amounts of money were paid. As a long-time member of Parabot, the first scripts that I ever used were made by the likes of Matt and MrsDefNerd and I never had to pay for them.
+##Experienced
+The API is used to the fullest in Minimal Dungeoneering to bring you the quickest, most reliable performance. In addition to sleep conditions, the strategies are looped through in a waterfall structure where one cannot continue until the other has passed. This was possible thanks to the input of the Parabot community.

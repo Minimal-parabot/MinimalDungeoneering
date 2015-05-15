@@ -69,12 +69,12 @@ public class GrabOrb implements Strategy
         {
             e.printStackTrace();
 
-            Logger.addMessage("NullPointerException when getting all scene objects");
+            Logger.addMessage("NullPointerException when getting all scene objects", false);
         }
 
         if (crate == null || !Players.getMyPlayer().getLocation().equals(ORB_TILES[ORB_TILES.length - 1]))
         {
-            Logger.addMessage("Walking to orb");
+            Logger.addMessage("Walking to orb", true);
 
             ORB_PATH.traverse();
 
@@ -83,7 +83,7 @@ public class GrabOrb implements Strategy
 
         if (crate != null && Players.getMyPlayer().getLocation().equals(ORB_TILES[ORB_TILES.length - 1]))
         {
-            Logger.addMessage("Grabbing orb");
+            Logger.addMessage("Grabbing orb", true);
 
             crate.interact(SceneObjects.Option.FIRST);
 

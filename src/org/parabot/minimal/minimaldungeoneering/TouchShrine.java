@@ -54,12 +54,12 @@ public class TouchShrine implements Strategy
         {
             e.printStackTrace();
 
-            Logger.addMessage("NullPointerException when getting all scene objects");
+            Logger.addMessage("NullPointerException when getting all scene objects", false);
         }
 
         if (shrine != null)
         {
-            Logger.addMessage("Touching shrine");
+            Logger.addMessage("Touching shrine", true);
 
             shrine.interact(SceneObjects.Option.FIRST);
 

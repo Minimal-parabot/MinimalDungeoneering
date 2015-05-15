@@ -32,7 +32,7 @@ public class SecondStage implements Strategy
     {
         if (SceneObjects.getNearest(GRILL_ID).length == 0)
         {
-            Logger.addMessage("Walking to middle tile");
+            Logger.addMessage("Walking to middle tile", true);
 
             MIDDLE_TILE.walkTo();
 
@@ -48,12 +48,12 @@ public class SecondStage implements Strategy
 
         if (SceneObjects.getNearest(GRILL_ID).length > 0)
         {
-            Logger.addMessage("Opening grill");
-
             SceneObject grill = SceneObjects.getClosest(GRILL_ID);
 
             if (grill != null)
             {
+                Logger.addMessage("Opening grill", true);
+
                 grill.interact(SceneObjects.Option.OPEN);
 
                 Time.sleep(new SleepCondition()

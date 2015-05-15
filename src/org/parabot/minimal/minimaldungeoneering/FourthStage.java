@@ -42,7 +42,7 @@ public class FourthStage implements Strategy
         if (SceneObjects.getClosest(passageWayId) == null
                 || SceneObjects.getClosest(passageWayId).distanceTo() >= 15)
         {
-            Logger.addMessage("Traversing to passageway");
+            Logger.addMessage("Traversing to passageway", true);
 
             TILE_PATH.traverse();
 
@@ -51,12 +51,12 @@ public class FourthStage implements Strategy
 
         if (SceneObjects.getClosest(passageWayId).distanceTo() < 15)
         {
-            Logger.addMessage("Entering passageway");
-
             SceneObject passageWay = SceneObjects.getClosest(passageWayId);
 
             if (passageWay != null)
             {
+                Logger.addMessage("Entering passageway", true);
+
                 passageWay.interact(SceneObjects.Option.OPEN);
 
                 Time.sleep(new SleepCondition()

@@ -37,7 +37,7 @@ public class FirstStage implements Strategy
     {
         if (Inventory.getCount() < 20)
         {
-            Logger.addMessage("Opening chest for supplies");
+            Logger.addMessage("Opening chest for supplies", true);
 
             SceneObject chest = SceneObjects.getClosest(CHEST_ID);
 
@@ -58,7 +58,7 @@ public class FirstStage implements Strategy
 
         if (!Prayer.isActivated())
         {
-            Logger.addMessage("Toggling quick prayer");
+            Logger.addMessage("Toggling quick prayer", true);
 
             Prayer.toggle();
 
@@ -81,7 +81,7 @@ public class FirstStage implements Strategy
 
                 if (overload != null)
                 {
-                    Logger.addMessage("Drinking overload");
+                    Logger.addMessage("Drinking overload", true);
 
                     Menu.sendAction(74, overload.getId() - 1, overload.getSlot(), 3214);
 
@@ -89,12 +89,12 @@ public class FirstStage implements Strategy
                 }
             }
 
-            Logger.addMessage("Entering contortion bars");
-
             SceneObject contortionBars = SceneObjects.getClosest(CONTORTION_BARS_ID);
 
             if (contortionBars != null)
             {
+                Logger.addMessage("Entering contortion bars", true);
+
                 contortionBars.interact(SceneObjects.Option.OPEN);
 
                 Time.sleep(new SleepCondition()

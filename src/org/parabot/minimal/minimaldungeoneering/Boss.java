@@ -39,7 +39,7 @@ public class Boss implements Strategy
         {
             if (!boss.isInCombat())
             {
-                Logger.addMessage("Attacking boss");
+                Logger.addMessage("Attacking boss", true);
 
                 boss.interact(Npcs.Option.ATTACK);
 
@@ -55,7 +55,7 @@ public class Boss implements Strategy
 
             if (boss.isInCombat())
             {
-                Logger.addMessage("Waiting for boss to die");
+                Logger.addMessage("Waiting for boss to die", true);
 
                 Time.sleep(new SleepCondition()
                 {

@@ -30,7 +30,7 @@ public class Consume implements Strategy
     {
         if (Skill.HITPOINTS.getLevel() <= healthThreshold)
         {
-            Logger.addMessage("Eating");
+            Logger.addMessage("Eating", true);
 
             Item food = Inventory.getItems(FOOD_ID)[0];
 
@@ -41,7 +41,7 @@ public class Consume implements Strategy
         }
         else if (Skill.PRAYER.getLevel() < 15)
         {
-            Logger.addMessage("Drinking Super restore");
+            Logger.addMessage("Drinking Super restore", true);
 
             Item potion = Inventory.getItem(SUPER_RESTORE_ID);
 

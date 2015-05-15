@@ -27,7 +27,7 @@ import java.util.ArrayList;
         description = "A dungeoneering script that completes Floor 2 and Floor 3 on Ikov. Floor 3 is buggy, use only when babysitting.",
         name = "Minimal Dungeoneering",
         servers = { "Ikov" },
-        version = 0.5)
+        version = 0.6)
 
 public class MinimalDungeoneering extends Script implements Paintable, MessageListener
 {
@@ -125,7 +125,7 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
 
             if (message.contains("object"))
             {
-                Logger.addMessage("Account was nulled");
+                Logger.addMessage("Account was nulled", true);
 
                 secondaryTimer.restart();
 
@@ -135,7 +135,7 @@ public class MinimalDungeoneering extends Script implements Paintable, MessageLi
             {
                 floorsCompleted++;
 
-                Logger.addMessage("Secondary timer reset");
+                Logger.addMessage("Secondary timer reset", true);
 
                 secondaryTimer.restart();
             }

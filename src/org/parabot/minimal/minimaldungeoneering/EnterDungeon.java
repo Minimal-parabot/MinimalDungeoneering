@@ -36,7 +36,7 @@ public class EnterDungeon implements Strategy
     {
         if (Game.getOpenBackDialogId() == -1 || Game.getOpenBackDialogId() == 4900)
         {
-            Logger.addMessage("Talking to Thok");
+            Logger.addMessage("Talking to Thok", true);
 
             Npc thok = Npcs.getClosest(THOK_ID);
 
@@ -57,7 +57,7 @@ public class EnterDungeon implements Strategy
 
         if (Game.getOpenBackDialogId() == 2469)
         {
-            Logger.addMessage("Entering " + MinimalDungeoneering.mode);
+            Logger.addMessage("Entering " + MinimalDungeoneering.mode, true);
 
             if (MinimalDungeoneering.mode == Mode.SECOND_FLOOR)
             {
@@ -80,7 +80,7 @@ public class EnterDungeon implements Strategy
 
         if (Npcs.getNearest(THOK_ID).length == 0)
         {
-            Logger.addMessage("Waiting for 8 seconds");
+            Logger.addMessage("Waiting for 8 seconds", true);
 
             Time.sleep(8000);
         }

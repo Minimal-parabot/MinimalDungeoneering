@@ -8,11 +8,6 @@ import org.rev317.min.api.methods.Inventory;
 import org.rev317.min.api.methods.Menu;
 import org.rev317.min.api.wrappers.Item;
 
-/**
- * This class is in charge of making sure our equipment is worn
- * Additionally, it activates prayers if it recognizes that none are enabled
- * and disabled auto-retaliate
- */
 public class EquipGear implements Strategy
 {
     private final int[] armorIds;
@@ -31,7 +26,7 @@ public class EquipGear implements Strategy
     @Override
     public void execute()
     {
-        Logger.addMessage("Equipping armor");
+        Logger.addMessage("Equipping armor", true);
 
         for (Item item : Inventory.getItems(armorIds))
         {
@@ -46,7 +41,7 @@ public class EquipGear implements Strategy
         {
             if (Game.getSetting(172) != 0)
             {
-                Logger.addMessage("Disabling auto-retaliate");
+                Logger.addMessage("Disabling auto-retaliate", true);
 
                 Menu.sendAction(169, -1, -1, 150);
             }
@@ -55,7 +50,7 @@ public class EquipGear implements Strategy
         {
             if (Game.getSetting(172) == 0)
             {
-                Logger.addMessage("Enabling auto-retaliate");
+                Logger.addMessage("Enabling auto-retaliate", true);
 
                 Menu.sendAction(169, -1, -1, 150);
             }

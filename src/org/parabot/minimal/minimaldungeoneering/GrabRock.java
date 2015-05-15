@@ -55,7 +55,7 @@ public class GrabRock implements Strategy
                 {
                     return Prayer.isActivated();
                 }
-            }, 3000);
+            }, 1000);
         }
 
         try
@@ -72,12 +72,12 @@ public class GrabRock implements Strategy
         {
             e.printStackTrace();
 
-            Logger.addMessage("NullPointerException when getting all scene objects");
+            Logger.addMessage("NullPointerException when getting all scene objects", false);
         }
 
         if (sculpture == null || sculpture.distanceTo() > 10)
         {
-            Logger.addMessage("Walking to rock");
+            Logger.addMessage("Walking to rock", true);
 
             SCULPTURE_PATH.traverse();
 
@@ -86,7 +86,7 @@ public class GrabRock implements Strategy
 
         if (sculpture != null && sculpture.distanceTo() <= 10)
         {
-            Logger.addMessage("Grabbing rock");
+            Logger.addMessage("Grabbing rock", true);
 
             sculpture.interact(SceneObjects.Option.FIRST);
 

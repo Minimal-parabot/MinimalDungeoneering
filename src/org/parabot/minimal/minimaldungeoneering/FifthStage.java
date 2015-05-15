@@ -48,7 +48,7 @@ public class FifthStage implements Strategy
 
         if (passageWay == null)
         {
-            Logger.addMessage("Traversing to middle tile");
+            Logger.addMessage("Traversing to middle tile", true);
 
             MIDDLE_TILE.walkTo();
 
@@ -57,7 +57,7 @@ public class FifthStage implements Strategy
 
         if (passageWay != null)
         {
-            Logger.addMessage("Entering passageway");
+            Logger.addMessage("Entering passageway", true);
 
             passageWay.interact(SceneObjects.Option.OPEN);
 

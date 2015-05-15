@@ -40,7 +40,7 @@ public class ThirdStage implements Strategy
     {
         if (!Players.getMyPlayer().getLocation().equals(TILE_ARRAY[TILE_ARRAY.length - 1]))
         {
-            Logger.addMessage("Traversing tile path");
+            Logger.addMessage("Traversing tile path", true);
 
             TILE_PATH.traverse();
 
@@ -49,10 +49,10 @@ public class ThirdStage implements Strategy
 
         if (Players.getMyPlayer().getLocation().equals(TILE_ARRAY[TILE_ARRAY.length - 1]))
         {
-            Logger.addMessage("Crossing ledge");
+            Logger.addMessage("Crossing ledge", true);
 
-//            Menu.sendAction(502, 1192355742, 30, 79, 7239, 3);
-
+            // Interacting is hard-coded because getAllSceneObjects doesn't work on this floor
+            // Sometimes the local x and y coordinates will change and ruin the script
             Menu.sendAction(502, 1192356766, 30, 87, 7239, 3);
 
             Time.sleep(new SleepCondition()
